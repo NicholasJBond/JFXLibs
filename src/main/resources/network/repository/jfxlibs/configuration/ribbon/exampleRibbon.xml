@@ -47,6 +47,37 @@
         </Options>
     </Item>
 
+    <Item>
+        <Label>Thing</Label>
+        <Image>green</Image>
+        <Tab>Home</Tab>
+        <Group>Colour</Group>
+        <Type>Small</Type>
+        <Command>0</Command>
+    </Item>
+    <Item>
+        <Label>Import CSV</Label>
+        <Image>csv</Image>
+        <Tab>Home</Tab>
+        <Group>Import</Group>
+        <Type>Large</Type>
+        <Command>1</Command>
+    </Item>
+    <Item>
+        <Label>Export</Label>
+        <Image>starnet</Image>
+        <Tab>Home</Tab>
+        <Group>Export</Group>
+        <Type>Large_with_dropdown</Type>
+        <Command>2</Command>
+        <Options>
+            <Option>
+                <Label>Magnet Civilcad Neutral File</Label>
+                <Image>magnet</Image>
+                <Command>3</Command>
+            </Option>
+        </Options>
+    </Item>
 
 </Items>
 

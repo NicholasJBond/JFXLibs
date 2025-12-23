@@ -8,12 +8,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 public class Configuration {
     public static JSONObject convertXMLtoJSONObject(String path){
-        File file = new File(Objects.requireNonNull(Configuration.class.getResource((path))).getFile());
 
+        File file = new File(path);
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
@@ -29,7 +33,22 @@ public class Configuration {
     }
 
     public static Image toImage(String path){
-        return new Image(String.valueOf(Configuration.class
-                .getResource(path)));
+        try {
+            System.out.println(path);
+            System.out.println(Thread
+                    .currentThread()
+                    .getContextClassLoader()
+                    .getResource(path));
+            File file = new File(Paths
+                    .get(Thread
+                            .currentThread()
+                            .getContextClassLoader()
+                            .getResource(path).toURI()).toString());
+            return new Image(file.toURI().toString());
+
+        } catch (NullPointerException | URISyntaxException i) {
+            throw new RuntimeException(i);
+        }
+
     }
 }

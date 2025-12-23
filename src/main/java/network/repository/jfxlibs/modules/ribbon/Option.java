@@ -5,7 +5,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import network.repository.jfxlibs.Configuration;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Option extends HBox implements Command{
@@ -16,7 +15,7 @@ public class Option extends HBox implements Command{
 
     public Option(Ribbon ribbon, JSONObject option) {
         label = new Label(option.getString("Label"));
-        image = Configuration.toImage(ribbon.imagePath + option.getString("Image").toLowerCase() + ".png");
+        image = Configuration.toImage(ribbon.imageDirectory + "/" +  option.getString("Image").toLowerCase() + ".png");
         command = option.getInt("Command");
         this.ribbon = ribbon;
 

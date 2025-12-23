@@ -1,7 +1,6 @@
 package network.repository.jfxlibs.modules.ribbon;
 
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
@@ -9,13 +8,18 @@ import network.repository.jfxlibs.Configuration;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class Ribbon extends TabPane {
     public final String profileDirectory;
-    public final String imagePath;
+    public final String imageDirectory;
 
     private ArrayList<String> tabOrder = new ArrayList<>();
     private HashMap<String, ArrayList<Item>> tabs = new HashMap<>();
@@ -28,14 +32,31 @@ public class Ribbon extends TabPane {
         super.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/network/repository/jfxlibs/styles/ribbon.css")).toExternalForm());
         super.getStyleClass().add("ribbon");
         this.profileDirectory = profileDirectory;
-        this.imagePath = imageDirectory;
+        this.imageDirectory = imageDirectory;
         this.consumer = consumer;
     }
 
 
 
-    public void loadProfile(String name){
-        JSONObject profile = Configuration.convertXMLtoJSONObject(profileDirectory + name + ".xml");
+    public void loadProfile(String name) throws MalformedURLException {
+
+        JSONObject profile = null;
+
+        try {
+            System.out.println(profileDirectory + "/" + name + ".xml");
+            System.out.println(Thread
+                    .currentThread()
+                    .getContextClassLoader()
+                    .getResource(profileDirectory + "/" + name + ".xml"));
+            profile = Configuration.convertXMLtoJSONObject(Paths
+                    .get(Thread
+                    .currentThread()
+                    .getContextClassLoader()
+                    .getResource(profileDirectory + "/" + name + ".xml").toURI()).toString());
+
+        } catch (NullPointerException | URISyntaxException i) {
+            throw new RuntimeException(i);
+        }
 
         JSONObject itemsObject = profile.getJSONObject("Items");
 

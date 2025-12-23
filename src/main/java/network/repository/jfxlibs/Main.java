@@ -2,21 +2,21 @@ package network.repository.jfxlibs;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import network.repository.jfxlibs.modules.ribbon.Ribbon;
 
 import java.io.IOException;
-import java.util.Objects;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         VBox main = new VBox();
 
-        Ribbon ribbon = new Ribbon( "/network/repository/jfxlibs/configuration/ribbon/",
-                "/network/repository/jfxlibs/images/", integer -> {
+        Ribbon ribbon = new Ribbon("network/repository/jfxlibs/configuration/ribbon",
+                "network/repository/jfxlibs/images", integer -> {
             String colour;
             switch (integer){
                 case 1 -> colour = "#980000";

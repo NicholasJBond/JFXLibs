@@ -1,11 +1,6 @@
 package network.repository.jfxlibs.modules.ribbon;
 
 import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.PopupControl;
 import javafx.scene.image.Image;
@@ -14,12 +9,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Box;
 import network.repository.jfxlibs.Configuration;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
-import java.net.URL;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -42,7 +36,9 @@ public class Item extends HBox implements Command{
     public Item(Ribbon ribbon, JSONObject jsonItem) {
         this.ribbon = ribbon;
         this.label = new Label(jsonItem.getString("Label"));
-        this.image = Configuration.toImage(ribbon.imagePath + jsonItem.getString("Image").toLowerCase() + ".png");
+
+        this.image = Configuration.toImage(ribbon.imageDirectory + "/" + jsonItem.getString("Image").toLowerCase() + ".png");
+
         this.tab = jsonItem.getString("Tab");
         this.group = jsonItem.getString("Group");
         this.type = Type.valueOf(jsonItem.getString("Type").toUpperCase());
@@ -57,23 +53,35 @@ public class Item extends HBox implements Command{
 
         switch (type){
             case LARGE_DROPDOWN, SMALL_DROPDOWN ->{
-                for (Object o: jsonItem.getJSONObject("Options").getJSONArray("Option")){
-                    if (o instanceof JSONObject jsonObject){
-                        options.add(new Option(ribbon, jsonObject));
+                JSONObject joptions = jsonItem.getJSONObject("Options");
+                if(joptions.get("Option") instanceof JSONObject J){
+                    options.add(new Option(ribbon, J));
+                }else{
+                    for (Object o: joptions.getJSONArray("Option")){
+                        if (o instanceof JSONObject jsonObject){
+                            options.add(new Option(ribbon, jsonObject));
+                        }
                     }
                 }
             }
             case  LARGE_WITH_DROPDOWN, SMALL_WITH_DROPDOWN ->{
                 JSONObject object = new JSONObject();
-                object.put("Label", this.label);
+                object.put("Label", this.label.getText());
                 object.put("Image", jsonItem.getString("Image"));
                 object.put("Command", this.command);
                 options.add(new Option(ribbon, object));
-                for (Object o: jsonItem.getJSONObject("Options").getJSONArray("Option")){
-                    if (o instanceof JSONObject jsonObject){
-                        options.add(new Option(ribbon, jsonObject));
+                JSONObject joptions = jsonItem.getJSONObject("Options");
+                if(joptions.get("Option") instanceof JSONObject J){
+                    options.add(new Option(ribbon, J));
+                }else{
+                    for (Object o: joptions.getJSONArray("Option")){
+                        if (o instanceof JSONObject jsonObject){
+                            options.add(new Option(ribbon, jsonObject));
+                        }
                     }
                 }
+
+
             }
             default -> {
 
@@ -94,8 +102,7 @@ public class Item extends HBox implements Command{
                 imageView.setFitWidth(30);
                 button.getChildren().addAll(imageView, label);
                 button.getStyleClass().add("button");
-                button.setStyle("-fx-alignment: center;");
-                button.setStyle("-fx-padding: 1 10 1 10;");
+                button.setStyle("-fx-alignment: center;-fx-padding: 1 10 1 10;-fx-effect: null;");
                 button.setOnMouseReleased(event -> {ribbon.consumer.accept(command);});
 
                 VBox.setVgrow(button, Priority.ALWAYS);
@@ -115,8 +122,7 @@ public class Item extends HBox implements Command{
                 imageView.setFitWidth(30);
                 button.getChildren().addAll(imageView);
                 button.getStyleClass().add("button");
-                button.setStyle("-fx-alignment: center;");
-                button.setStyle("-fx-padding: 5 10 1 10;");
+                button.setStyle("-fx-alignment: center;-fx-padding: 5 10 1 10;-fx-effect: null;");
                 button.setOnMouseReleased(event -> {ribbon.consumer.accept(command);});
 
                 label.setText(label.getText() + " ▼");
@@ -142,9 +148,7 @@ public class Item extends HBox implements Command{
                 imageView.setFitWidth(30);
 
                 button.getStyleClass().add("button");
-                button.setStyle("-fx-alignment: center;");
-                button.setStyle("-fx-padding: 5 10 1 10;");
-
+                button.setStyle("-fx-alignment: center;-fx-padding: 5 10 1 10;-fx-effect: null;");
                 label.setText(label.getText() + " ▼");
                 HBox dropdown = new HBox();
                 dropdown.getChildren().add(label);

@@ -123,6 +123,7 @@
     -fx-background-color: linear-gradient(to bottom, derive(-fx-accent, 180%)  0%, derive(-fx-accent, 130%) 50%, derive(-fx-accent, 180%)  100%);
     -fx-padding: 1 5 1 5;
     -fx-background-insets: 0;
+    -fx-min-width: 75;
 }
 
 .ribbon .item .button:hover {
