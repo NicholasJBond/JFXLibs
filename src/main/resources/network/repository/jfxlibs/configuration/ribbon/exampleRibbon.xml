@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Items>
+    <Item>
+        <Label>Accent Colour</Label>
+        <Image>paint</Image>
+        <Tab>Home</Tab>
+        <Group>Colours</Group>
+        <Type>Large_dropdown</Type>
+        <Command>0</Command>
+        <Options>
+            <Option>
+                <Label>Red</Label>
+                <Image>red</Image>
+                <Command>1</Command>
+            </Option>
+            <Option>
+                <Label>Orange</Label>
+                <Image>yellow</Image>
+                <Command>2</Command>
+            </Option>
+            <Option>
+                <Label>Green</Label>
+                <Image>green</Image>
+                <Command>3</Command>
+            </Option>
+            <Option>
+                <Label>Light Blue</Label>
+                <Image>light_blue</Image>
+                <Command>4</Command>
+            </Option>
+            <Option>
+                <Label>Dark Blue</Label>
+                <Image>dark_blue</Image>
+                <Command>5</Command>
+            </Option>
+            <Option>
+                <Label>Pink</Label>
+                <Image>pink</Image>
+                <Command>6</Command>
+            </Option>
+            <Option>
+                <Label>Purple</Label>
+                <Image>purple</Image>
+                <Command>7</Command>
+            </Option>
+        </Options>
+    </Item>
+
+
+</Items>
+
+

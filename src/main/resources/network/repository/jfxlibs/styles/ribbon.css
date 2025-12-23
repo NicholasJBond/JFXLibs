@@ -1,0 +1,168 @@
+.root{
+    -fx-accent: #186aff;
+    -fx-focus-color:transparent;
+    -fx-faint-focus-color:transparent;
+
+}
+.ribbon-button{
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-background-color: #fafafa;
+    -fx-pref-height: 23;
+    -fx-min-width: 100;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 2px;
+}
+
+
+
+.ribbon-button:hover{
+    -fx-background-color: derive(-fx-accent, 110%);
+    -fx-text-fill: #efefef;
+}
+
+
+
+
+
+.ribbon-tab-header{
+    -fx-background-color: white;
+    -fx-text-base-color: black;
+    -fx-start-margin: 5px;
+    -fx-end-margin: 5px;
+    -fx-pref-width: 100px;
+    -fx-alignment: center;
+}
+
+.ribbon-tab-header:hover{
+    -fx-background-color: linear-gradient(to top, derive(-fx-accent, 150%) 0%,derive(-fx-accent, 160%) 20%, white 70%);
+}
+
+
+
+.ribbon-tab-header:selected{
+    -fx-background-color: linear-gradient(to bottom, derive(-fx-accent, 30%) 0%, derive(-fx-accent, 60%) 100%);
+    -fx-text-base-color: white;
+}
+
+
+.ribbon > .tab-header-area > .headers-region > .tab:hover {
+    -fx-pref-height: 26px;
+
+}
+
+.ribbon > .tab-header-area > .tab-header-background{
+    -fx-background-color: #d6d6d6;
+}
+
+.ribbon > .tab-header-area > .headers-region{
+    -fx-pref-height: 27px;
+    -fx-translate-y: 4;
+}
+
+.ribbon > .tab-header-area{
+    -fx-pref-height: 27px;
+}
+
+
+
+.ribbon-group-text{
+    -fx-font-size: 13px;
+}
+
+.ribbon .contents{
+    -fx-background-color: linear-gradient(to bottom, derive(-fx-accent, 60%) 0%, derive(-fx-accent, 80%) 45%, derive(-fx-accent, 90%) 100%);
+    -fx-spacing: 4px;
+    -fx-padding: 5px;
+}
+
+.ribbon .group {
+    -fx-padding: 1 5 1 5;
+    -fx-background-color: white;
+    -fx-background-radius: 4px;
+    -fx-alignment: bottom-center;
+}
+
+.ribbon .group .section {
+    -fx-padding: 3px;
+    -fx-spacing: 1px;
+    /*-fx-border-width: 1px;*/
+    /*-fx-border-color: black;*/
+    /*-fx-border-style: dashed;*/
+}
+/*.ribbon .group .item {*/
+/*    -fx-border-width: 1px;*/
+/*    -fx-border-color: black;*/
+/*    -fx-border-style: dashed;*/
+/*}*/
+
+.ribbon .group .contents {
+    -fx-padding: 10px;
+    /*-fx-border-width: 1px;*/
+    /*-fx-border-color: black;*/
+    /*-fx-border-style: dashed;*/
+}
+
+.ribbon .group .titleBar {
+    /*-fx-border-width: 1px;*/
+    -fx-border-color: black;
+    /*-fx-border-style: dashed;*/
+    -fx-alignment: center;
+    -fx-border-width: 0.4 0 0 0;
+}
+
+.ribbon .group .titleBar Text {
+    -fx-font-size: 10;
+}
+
+.ribbon .item .button {
+    -fx-border-width: 0.35;
+    -fx-border-color: derive(-fx-accent, 80%);
+    -fx-border-radius: 2px;
+    -fx-background-radius: 2px;
+    -fx-background-color: linear-gradient(to bottom, derive(-fx-accent, 180%)  0%, derive(-fx-accent, 130%) 50%, derive(-fx-accent, 180%)  100%);
+    -fx-padding: 1 5 1 5;
+    -fx-background-insets: 0;
+}
+
+.ribbon .item .button:hover {
+     -fx-background-color: linear-gradient(to bottom, derive(-fx-accent, 150%) 0%, derive(-fx-accent, 110%) 50%, derive(-fx-accent, 150%) 100%);
+ }
+
+.ribbon .item .button:pressed {
+    -fx-background-color: linear-gradient(to bottom, derive(-fx-accent, 120%) 0%, derive(-fx-accent, 90%) 50%, derive(-fx-accent, 120%) 100%);
+}
+
+
+.dropdown {
+    -fx-background-color: white;
+    -fx-padding: 1;
+}
+
+.dropdown .option{
+    -fx-padding: 2 7 2 7;
+    -fx-min-width: 125px;
+    -fx-alignment: center-left;
+    -fx-spacing: 10px;
+}
+
+.dropdown .option:hover{
+    -fx-background-color: linear-gradient(to bottom, derive(-fx-accent, 150%) 0%, derive(-fx-accent, 110%) 50%, derive(-fx-accent, 130%) 100%);
+    -fx-border-color: -fx-accent;
+    -fx-border-width: 0.25;
+}
+
+.dropdown .option:pressed {
+    -fx-background-color: linear-gradient(to bottom, derive(-fx-accent, 120%) 0%, derive(-fx-accent, 90%) 50%, derive(-fx-accent, 120%) 100%);
+}
+
+
+
+
+
+
+
+
+
+
+
