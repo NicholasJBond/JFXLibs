@@ -3,6 +3,7 @@ package network.repository.jfxlibs.modules.ribbon;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
@@ -22,13 +23,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Item extends HBox {
+public class Item extends HBox implements Command{
+
     public enum Type{
         LARGE, LARGE_DROPDOWN, LARGE_WITH_DROPDOWN, SMALL, SMALL_WITH_DROPDOWN, SMALL_DROPDOWN
     }
 
 
-    public final String label;
+    public final Label label;
     public final Image image;
     public final String tab;
     public final String group;
@@ -39,7 +41,7 @@ public class Item extends HBox {
 
     public Item(Ribbon ribbon, JSONObject jsonItem) {
         this.ribbon = ribbon;
-        this.label = jsonItem.getString("Label");
+        this.label = new Label(jsonItem.getString("Label"));
         this.image = Configuration.toImage(ribbon.imagePath + jsonItem.getString("Image").toLowerCase() + ".png");
         this.tab = jsonItem.getString("Tab");
         this.group = jsonItem.getString("Group");
@@ -49,6 +51,9 @@ public class Item extends HBox {
         }else{
             this.command = jsonItem.getInt("Command");
         }
+
+        ribbon.commands.put(command, this);
+
 
         switch (type){
             case LARGE_DROPDOWN, SMALL_DROPDOWN ->{
@@ -80,7 +85,6 @@ public class Item extends HBox {
 
 
         ImageView imageView = new ImageView(this.image);
-        Label label = new Label(this.label);
         switch (type){
             case LARGE -> {
                 VBox casing = new VBox();
@@ -250,4 +254,33 @@ public class Item extends HBox {
         popup.show(this, bounds.getMinX(), bounds.getMaxY());
 
     }
+
+    @Override
+    public void setLabel(String string) {
+        switch (type) {
+            case LARGE_DROPDOWN, LARGE_WITH_DROPDOWN -> {
+                label.setText(string + " ▼");
+            }
+            default -> {
+                label.setText(string);
+            }
+        }
+    }
+
+    @Override
+    public void disable() {
+        super.setDisable(true);
+    }
+
+    @Override
+    public void enable() {
+        super.setDisable(false);
+    }
+
+    @Override
+    public int getCommand(){
+        return command;
+    }
+
+
 }

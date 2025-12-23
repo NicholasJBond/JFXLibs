@@ -23,19 +23,13 @@ public class Dropdown extends PopupControl {
         content.getStyleClass().add("dropdown");
 
         for (Option option : options) {
-            ImageView imageView = new ImageView(option.image);
-            imageView.setFitHeight(12);
-            imageView.setFitWidth(12);
-
-            HBox button = new HBox(imageView, new Label(option.label));
-            button.getStyleClass().add("option");
-            button.setOnMouseReleased(event -> {
+            option.setOnMouseReleased(event -> {
                 option.ribbon.consumer.accept(option.command);
                 this.hide();
             });
 
 
-            content.getChildren().add(button);
+            content.getChildren().add(option);
         }
 
 

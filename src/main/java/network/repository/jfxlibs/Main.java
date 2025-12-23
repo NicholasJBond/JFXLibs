@@ -36,6 +36,8 @@ public class Main extends Application {
 
         ribbon.loadProfile("exampleRibbon");
 
+        ribbon.commands.get(3).disable();
+
         Scene scene = new Scene(main, 1600, 900);
         stage.setScene(scene);
         stage.show();

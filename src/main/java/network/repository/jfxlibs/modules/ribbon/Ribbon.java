@@ -20,6 +20,7 @@ public class Ribbon extends TabPane {
     private ArrayList<String> tabOrder = new ArrayList<>();
     private HashMap<String, ArrayList<Item>> tabs = new HashMap<>();
     public final Consumer<Integer> consumer;
+    public final HashMap<Integer, Command> commands = new HashMap<>();
 
     public Ribbon(String profileDirectory, String imageDirectory, Consumer<Integer> consumer){
         super();
