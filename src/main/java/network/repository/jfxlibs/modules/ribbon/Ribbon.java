@@ -9,10 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Consumer;
@@ -43,11 +40,6 @@ public class Ribbon extends TabPane {
         JSONObject profile = null;
 
         try {
-            System.out.println(profileDirectory + "/" + name + ".xml");
-            System.out.println(Thread
-                    .currentThread()
-                    .getContextClassLoader()
-                    .getResource(profileDirectory + "/" + name + ".xml"));
             profile = Configuration.convertXMLtoJSONObject(Paths
                     .get(Thread
                     .currentThread()

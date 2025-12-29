@@ -2,8 +2,8 @@
     -fx-accent: #186aff;
     -fx-focus-color:transparent;
     -fx-faint-focus-color:transparent;
-
 }
+
 .ribbon-button{
     -fx-border-radius: 0;
     -fx-background-radius: 0;
@@ -138,6 +138,8 @@
 .dropdown {
     -fx-background-color: white;
     -fx-padding: 1;
+    -fx-border-width: 0.5;
+    -fx-border-color: -fx-accent;
 }
 
 .dropdown .option{

@@ -7,7 +7,9 @@ module network.repository.jfxlibs {
     opens network.repository.jfxlibs to javafx.fxml;
     exports network.repository.jfxlibs;
     exports network.repository.jfxlibs.modules.ribbon;
-    opens network.repository.jfxlibs.configuration.ribbon;
+    exports network.repository.jfxlibs.modules.ticklist;
+    opens network.repository.jfxlibs.ribbon;
     opens network.repository.jfxlibs.images;
+    opens network.repository.jfxlibs.styles;
 
 }

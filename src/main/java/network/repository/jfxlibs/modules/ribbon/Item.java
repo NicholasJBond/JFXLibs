@@ -12,8 +12,6 @@ import javafx.scene.layout.VBox;
 import network.repository.jfxlibs.Configuration;
 import org.json.JSONObject;
 
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Objects;
 

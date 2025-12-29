@@ -1,0 +1,47 @@
+
+.ticklist {
+    -fx-pref-width: 150px;
+    -fx-padding: 5px;
+    -fx-background-color: derive(-fx-accent, 140%);
+    -fx-border-color: -fx-accent;
+    -fx-border-width: 0.75;
+    -fx-alignment: center;
+
+}
+
+.ticklist .title {
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-padding: 4;
+}
+
+.ticklist .list-view {
+    -fx-border-width: 0.25;
+    -fx-border-color: -fx-accent;
+
+}
+
+.ticklist .list-cell {
+    -fx-background-color: white;
+}
+
+.ticklist .list-cell:filled{
+    -fx-border-width: 0.05;
+    -fx-border-color: -fx-accent;
+}
+
+.list-cell:selected {
+    -fx-background-color: transparent;
+    -fx-faint-focus-colour: transparent
+}
+
+.ticklist .item{
+    /*-fx-border-color: black;*/
+    /*-fx-border-width: 1;*/
+    /*-fx-border-style: dashed;*/
+}
+
+.ticklist .box{
+    -fx-border-width: 0;
+    -fx-background-color: transparent;
+}

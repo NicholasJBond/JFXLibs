@@ -34,11 +34,6 @@ public class Configuration {
 
     public static Image toImage(String path){
         try {
-            System.out.println(path);
-            System.out.println(Thread
-                    .currentThread()
-                    .getContextClassLoader()
-                    .getResource(path));
             File file = new File(Paths
                     .get(Thread
                             .currentThread()

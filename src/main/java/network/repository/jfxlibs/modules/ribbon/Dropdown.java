@@ -1,15 +1,11 @@
 package network.repository.jfxlibs.modules.ribbon;
 
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.control.PopupControl;
 import javafx.scene.control.Skin;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
-import java.util.Objects;
 
 public class Dropdown extends PopupControl {
     private final VBox content;
