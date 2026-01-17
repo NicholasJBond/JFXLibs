@@ -2,81 +2,12 @@
 
 <Items>
     <Item>
-        <Label>Accent Colour</Label>
-        <Image>paint</Image>
-        <Tab>Home</Tab>
-        <Group>Colours</Group>
-        <Type>Large_dropdown</Type>
-        <Command>0</Command>
-        <Options>
-            <Option>
-                <Label>Red</Label>
-                <Image>red</Image>
-                <Command>1</Command>
-            </Option>
-            <Option>
-                <Label>Orange</Label>
-                <Image>yellow</Image>
-                <Command>2</Command>
-            </Option>
-            <Option>
-                <Label>Green</Label>
-                <Image>green</Image>
-                <Command>3</Command>
-            </Option>
-            <Option>
-                <Label>Light Blue</Label>
-                <Image>light_blue</Image>
-                <Command>4</Command>
-            </Option>
-            <Option>
-                <Label>Dark Blue</Label>
-                <Image>dark_blue</Image>
-                <Command>5</Command>
-            </Option>
-            <Option>
-                <Label>Pink</Label>
-                <Image>pink</Image>
-                <Command>6</Command>
-            </Option>
-            <Option>
-                <Label>Purple</Label>
-                <Image>purple</Image>
-                <Command>7</Command>
-            </Option>
-        </Options>
-    </Item>
-
-    <Item>
-        <Label>Thing</Label>
-        <Image>green</Image>
-        <Tab>Home</Tab>
-        <Group>Colour</Group>
-        <Type>Small</Type>
-        <Command>0</Command>
-    </Item>
-    <Item>
-        <Label>Import CSV</Label>
-        <Image>csv</Image>
-        <Tab>Home</Tab>
-        <Group>Import</Group>
+        <Label>Refresh</Label>
+        <Image>reload</Image>
+        <Tab>CAD</Tab>
+        <Group>Canvas</Group>
         <Type>Large</Type>
-        <Command>1</Command>
-    </Item>
-    <Item>
-        <Label>Export</Label>
-        <Image>starnet</Image>
-        <Tab>Home</Tab>
-        <Group>Export</Group>
-        <Type>Large_with_dropdown</Type>
-        <Command>2</Command>
-        <Options>
-            <Option>
-                <Label>Magnet Civilcad Neutral File</Label>
-                <Image>magnet</Image>
-                <Command>3</Command>
-            </Option>
-        </Options>
+        <Command>0</Command>
     </Item>
 
 </Items>

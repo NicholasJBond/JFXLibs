@@ -16,6 +16,7 @@ public class TickList extends VBox {
         list.setCellFactory(lv -> new TickListCell());
         list.setSelectionModel(null);
         list.setFocusTraversable(false);
+        this.setPrefWidth(400);
 
 
         this.getChildren().add(text);

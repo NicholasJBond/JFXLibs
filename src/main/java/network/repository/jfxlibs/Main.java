@@ -2,38 +2,34 @@ package network.repository.jfxlibs;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import network.repository.jfxlibs.modules.cadpane.*;
 import network.repository.jfxlibs.modules.ribbon.Ribbon;
 import network.repository.jfxlibs.modules.ticklist.TickList;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.concurrent.ThreadLocalRandom;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 public class Main extends Application {
+    private CadPane cadPane = new CadPane();
     @Override
     public void start(Stage stage) throws IOException {
         VBox main = new VBox();
         HBox content = new HBox();
         Ribbon ribbon = new Ribbon("network/repository/jfxlibs/ribbon",
-                "network/repository/jfxlibs/images", integer -> {
-            String colour;
-            switch (integer){
-                case 1 -> colour = "#980000";
-                case 2 -> colour = "#8e4800";
-                case 3 -> colour = "green";
-                case 4 -> colour = "#186aff";
-                case 5 -> colour = "#001395";
-                case 6 -> colour = "#dc0026";
-                case 7 -> colour = "#5408ac";
-                default -> colour = "black";
-            }
-
-            main.setStyle("-fx-accent:"+ colour +"; -fx-focus-color:transparent; -fx-faint-focus-color:transparent;");
-        });
+                "network/repository/jfxlibs/images", this::processActions);
 
 
 
@@ -43,24 +39,49 @@ public class Main extends Application {
 
         ribbon.loadProfile("exampleRibbon");
 
-        TickList list = new TickList("Setups");
+        TickList list = new TickList("Ticklist");
         list.add(new TestItem());
         list.add(new TestItem());
         list.add(new TestItem());
 
 
+        Tab tab = new Tab("Main");
+        Tab tab2 = new Tab("Not main");
+        TabPane cads = new TabPane();
+        cads.getTabs().addAll(tab, tab2);
+
+        ArrayList<CadFeature> features = new ArrayList<>();
+        features.add(new CadPoint("A", 50, 50, 0));
+        features.add(new CadPoint("A", 800, 125, 0));
+        features.add(new CadPoint("A", 870, 590, 0));
+        features.add(new CadPoint("A", 20, 700, 0));
+        features.add(new CadPolygon(
+                new double[]{
+                        50, 800, 870, 20
+                },
+                new double[]{
+                    50,125,590,700
+                }));
+
+        Random random = new Random();
+        for (int i = 0; i < 1_000_000; i++){
+            features.add(new CadPoint("A", i, random.nextDouble()*1_000_000, 0));
+        }
+
+        cadPane.setFeatures(features);
+
+        tab.setContent(cadPane);
 
         content.getChildren().add(list);
-
-        Region region = new Region();
-        HBox.setHgrow(region, Priority.ALWAYS);
-
-        content.getChildren().add(region);
+        content.getChildren().add(cads);
 
 
+        HBox.setHgrow(cads, Priority.ALWAYS);
+
+        VBox.setVgrow(content, Priority.ALWAYS);
 
 
-        ribbon.commands.get(3).disable();
+
 
         Scene scene = new Scene(main, 1600, 900);
         stage.setScene(scene);
@@ -68,6 +89,36 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        String fileName = "random_points.csv";
+        int totalRows = 1_000_000;
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            // Write Header
+            writer.write("id,x_coordinate,y_coordinate");
+            writer.newLine();
+
+            for (int i = 1; i <= totalRows; i++) {
+                double x = ThreadLocalRandom.current().nextDouble(-1000.0, 1000.0);
+                double y = ThreadLocalRandom.current().nextDouble(-1000.0, 1000.0);
+
+                writer.write(i + "," + x + "," + y);
+                writer.newLine();
+
+                // Optional: Print progress every 250k rows
+                if (i % 250_000 == 0) {
+                    System.out.println(i + " rows written...");
+                }
+            }
+            System.out.println("Successfully generated " + fileName);
+        } catch (IOException e) {
+            System.err.println("Error writing to file: " + e.getMessage());
+        }
         launch();
+    }
+
+    private void processActions(Integer i){
+        switch (i){
+            case 0 -> cadPane.setFeatures(CadDataGenerator.createSampleData());
+        }
     }
 }
