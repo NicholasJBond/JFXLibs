@@ -2,10 +2,13 @@ package network.repository.jfxlibs.modules.cadpane;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
+
+import java.text.DecimalFormat;
 
 
 public class CadPoint implements CadFeature{
@@ -13,7 +16,8 @@ public class CadPoint implements CadFeature{
     private final double x;
     private final double z;
     private final double y;
-    private double radius = 2;
+    private double radius = 5;
+    private boolean selected = false;
     public CadPoint(String name, double x, double y, double z) {
         this.name = name;
         this.x = x;
@@ -23,7 +27,7 @@ public class CadPoint implements CadFeature{
 
     @Override
     public void draw(GraphicsContext gc, double value) {
-        radius = value;
+        radius = value*1.5;
         gc.fillOval(x - radius, y - radius, radius * 2, radius * 2);
     }
 
@@ -48,30 +52,51 @@ public class CadPoint implements CadFeature{
     }
 
     @Override
-    public boolean drawHover(MouseEvent e, GraphicsContext gc, Affine transformation) {
-        Point2D scenePoint = new Point2D(e.getX(), e.getY());
-
-        try {
-            Point2D worldPoint = transformation.inverseTransform(scenePoint);
-            if (worldPoint.getX() > minX()-20 && worldPoint.getX() < maxX() + 20 && worldPoint.getY() > minY()-20 && worldPoint.getY() < maxY()+20){
-                gc.setFill(Color.YELLOW);
-                double newRadius = radius * 3;
-                Point2D point = transformation.transform(x, y);
-                gc.fillOval(point.getX(), point.getY() , newRadius * 2, newRadius * 2);
-                return true;
-            }else{
-                return false;
-
-            }
-        } catch (NonInvertibleTransformException ex) {
-            throw new RuntimeException(ex);
-        }
-
+    public boolean mouseOver(Point2D cursor, double mouseSize) {
+        double a = x-cursor.getX();
+        double b = y-cursor.getY();
+        return !((a * a) + (b * b) > mouseSize*mouseSize);
     }
+
+    @Override
+    public boolean inSelection(SmartPolygon selectionArea) {
+        return selectionArea.contains(new Point2D(x,y));
+    }
+
+
+
+    @Override
+    public void drawHover(GraphicsContext gc,Affine transformation, Affine inverse, Color color) {
+        gc.setFill(color);
+        gc.transform(transformation);
+        gc.fillOval(x-radius, y-radius , radius*2, radius*2);
+        gc.transform(inverse);
+    }
+
+    @Override
+    public void select() {
+        selected = !selected;
+    }
+
+    @Override
+    public boolean selected() {
+        return selected;
+    }
+
 
     @Override
     public boolean isClicked(double x, double y) {
 
         return false;
+    }
+
+    @Override
+    public void clearSelection() {
+        selected = false;
+    }
+
+    public String toString(){
+        DecimalFormat df = new DecimalFormat("#.###");
+        return "Point: "+df.format(x)+"  "+df.format(y);
     }
 }

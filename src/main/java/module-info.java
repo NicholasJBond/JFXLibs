@@ -2,6 +2,8 @@ module network.repository.jfxlibs {
     requires javafx.controls;
     requires org.json;
     requires java.desktop;
+    requires ejml.core;
+    requires ejml.simple;
 
 
     opens network.repository.jfxlibs to javafx.fxml;

@@ -1,7 +1,11 @@
 package network.repository.jfxlibs.modules.cadpane;
 
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Affine;
 
 import java.util.Arrays;
@@ -13,6 +17,9 @@ public class CadPolygon implements CadFeature{
     double maxx;
     double miny;
     double minx;
+    private boolean selected = false;
+    private double width = 2;
+
 
     public CadPolygon(double[] x, double[] y) {
         xCoords = x;
@@ -36,6 +43,8 @@ public class CadPolygon implements CadFeature{
 
     @Override
     public void draw(GraphicsContext gc, double value) {
+        gc.setLineWidth(width);
+        gc.setStroke(Color.GREEN);
         gc.strokePolygon(xCoords, yCoords, xCoords.length);
     }
 
@@ -60,13 +69,38 @@ public class CadPolygon implements CadFeature{
     }
 
     @Override
-    public boolean drawHover(MouseEvent e, GraphicsContext gc, Affine transformation) {
-
+    public boolean mouseOver(Point2D cursor, double mouseSize) {
         return false;
     }
 
     @Override
+    public boolean inSelection(SmartPolygon selectionArea) {
+        return false;
+    }
+
+    @Override
+    public void drawHover(GraphicsContext gc,Affine transformation, Affine inverse, Color color) {
+
+    }
+
+
+    @Override
     public boolean isClicked(double x, double y) {
         return false;
+    }
+
+    @Override
+    public void select() {
+        selected = !selected;
+    }
+
+    @Override
+    public boolean selected() {
+        return selected;
+    }
+
+    @Override
+    public void clearSelection() {
+        selected = false;
     }
 }
