@@ -10,6 +10,7 @@ module network.repository.jfxlibs {
     exports network.repository.jfxlibs;
     exports network.repository.jfxlibs.modules.ribbon;
     exports network.repository.jfxlibs.modules.ticklist;
+    exports network.repository.jfxlibs.modules.cadpane;
     opens network.repository.jfxlibs.ribbon;
     opens network.repository.jfxlibs.images;
     opens network.repository.jfxlibs.styles;

@@ -100,7 +100,7 @@ public class Item extends HBox implements Command{
                 imageView.setFitWidth(30);
                 button.getChildren().addAll(imageView, label);
                 button.getStyleClass().add("button");
-                button.setStyle("-fx-alignment: center;-fx-padding: 1 10 1 10;-fx-effect: null;");
+                button.setStyle("-fx-alignment: center;-fx-padding: 2 3 2 3;-fx-effect: null;");
                 button.setOnMouseReleased(event -> {ribbon.consumer.accept(command);});
 
                 VBox.setVgrow(button, Priority.ALWAYS);
@@ -120,7 +120,7 @@ public class Item extends HBox implements Command{
                 imageView.setFitWidth(30);
                 button.getChildren().addAll(imageView);
                 button.getStyleClass().add("button");
-                button.setStyle("-fx-alignment: center;-fx-padding: 5 10 1 10;-fx-effect: null;");
+                button.setStyle("-fx-alignment: center;-fx-padding: 2 3 2 3;-fx-effect: null;");
                 button.setOnMouseReleased(event -> {ribbon.consumer.accept(command);});
 
                 label.setText(label.getText() + " ▼");

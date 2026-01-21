@@ -35,7 +35,7 @@ public class Ribbon extends TabPane {
 
 
 
-    public void loadProfile(String name) throws MalformedURLException {
+    public void loadProfile(String name) {
 
         JSONObject profile = null;
 

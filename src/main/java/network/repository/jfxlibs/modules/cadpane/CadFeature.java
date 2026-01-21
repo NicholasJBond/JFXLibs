@@ -10,6 +10,7 @@ import javafx.scene.transform.Affine;
 
 
 public interface CadFeature {
+    int getId();
     void draw(GraphicsContext gc, double value);
     double maxX();
     double minX();

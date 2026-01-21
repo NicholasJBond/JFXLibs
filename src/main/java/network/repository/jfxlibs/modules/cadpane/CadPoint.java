@@ -12,17 +12,24 @@ import java.text.DecimalFormat;
 
 
 public class CadPoint implements CadFeature{
+    private final int id;
     private final String name;
     private final double x;
     private final double z;
     private final double y;
     private double radius = 5;
     private boolean selected = false;
-    public CadPoint(String name, double x, double y, double z) {
+    public CadPoint(int id, String name, double x, double y, double z) {
+        this.id = id;
         this.name = name;
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 
     @Override

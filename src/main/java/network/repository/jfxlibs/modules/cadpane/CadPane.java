@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 
 public class CadPane extends StackPane {
     private Canvas canvas = new Canvas();
-    private List<CadFeature> data;
+    private List<CadFeature> data = new ArrayList<>();
     private Affine transformation = new Affine();
     private double lastMouseX;
     private double lastMouseY;
@@ -59,7 +59,8 @@ public class CadPane extends StackPane {
 
     }
 
-    private ArrayList<CadFeature> getSelection(){
+    public ArrayList<CadFeature> getSelection(){
+        if(this.data.isEmpty()){return new ArrayList<>();}
         ArrayList<CadFeature> features = new ArrayList<>();
         for (CadFeature feature: data){
             if (feature.selected()){
@@ -69,7 +70,7 @@ public class CadPane extends StackPane {
         return features;
     }
 
-    public void setupEvents() {
+    private void setupEvents() {
         this.setOnMousePressed(e -> {
             contextMenu.hide();
 
@@ -199,6 +200,7 @@ public class CadPane extends StackPane {
     }
 
     private void redraw() {
+        if(this.data.isEmpty()){return;}
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         gc.setTransform(new Affine());
@@ -334,4 +336,6 @@ public class CadPane extends StackPane {
         gc.fillPolygon(xvals, yvals, n);
 
     }
+
+
 }

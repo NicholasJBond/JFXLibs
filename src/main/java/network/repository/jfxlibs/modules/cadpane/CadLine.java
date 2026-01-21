@@ -21,6 +21,7 @@ import java.util.Vector;
 
 
 public class CadLine implements CadFeature{
+    private final int id;
     private final double x1;
     private final double y1;
     private final double x2;
@@ -29,14 +30,19 @@ public class CadLine implements CadFeature{
     private double width = 0.5;
 
 
-    public CadLine(double x11, double y11, double x21, double y21) {
-
+    public CadLine(int id, double x11, double y11, double x21, double y21) {
+        this.id = id;
         this.x1 = x11;
         this.y1 = y11;
         this.x2 = x21;
         this.y2 = y21;
 
 
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 
     @Override

@@ -42,6 +42,11 @@ public class CadPolygon implements CadFeature{
     }
 
     @Override
+    public int getId() {
+        return 0;
+    }
+
+    @Override
     public void draw(GraphicsContext gc, double value) {
         gc.setLineWidth(width);
         gc.setStroke(Color.GREEN);
