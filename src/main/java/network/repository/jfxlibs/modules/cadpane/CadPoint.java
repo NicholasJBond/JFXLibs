@@ -70,6 +70,16 @@ public class CadPoint implements CadFeature{
         return selectionArea.contains(new Point2D(x,y));
     }
 
+    @Override
+    public boolean inSelection(double[] selectionArea) {
+        Point2D p = new Point2D(x, y);
+        Polygon polygon = new Polygon();
+        polygon.getPoints().addAll(selectionArea[0], selectionArea[1],
+                selectionArea[2], selectionArea[1],
+                selectionArea[2], selectionArea[3],
+                selectionArea[0], selectionArea[3]);
+        return polygon.contains(p);
+    }
 
 
     @Override

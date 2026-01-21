@@ -129,6 +129,25 @@ public class CadLine implements CadFeature{
     }
 
     @Override
+    public boolean inSelection(double[] selectionArea) {
+        if (selectionArea[0] < selectionArea[2]){
+            return selectionArea[0] < x1 && selectionArea[0] < x2
+                    && selectionArea[2] > x1 && selectionArea[2] > x2
+                    && selectionArea[1] < y1 && selectionArea[1] < y2
+                    && selectionArea[3] > y1 && selectionArea[3] > y2;
+        }
+
+        Point2D a = new Point2D(x1, y1);
+        Point2D b = new Point2D(x2, y2);
+        Polygon polygon = new Polygon();
+        polygon.getPoints().addAll(selectionArea[0], selectionArea[1],
+                selectionArea[2], selectionArea[1],
+                selectionArea[2], selectionArea[3],
+                selectionArea[0], selectionArea[3]);
+        return polygon.contains(a) || polygon.contains(b);
+    }
+
+    @Override
     public void drawHover(GraphicsContext gc,Affine transformation, Affine inverse, Color color) {
         gc.setLineWidth(width*3);
         gc.setStroke(color);

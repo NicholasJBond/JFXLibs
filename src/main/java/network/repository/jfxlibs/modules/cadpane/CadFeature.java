@@ -19,6 +19,7 @@ public interface CadFeature {
 
     boolean mouseOver(Point2D cursor, double mouseSize);
     boolean inSelection(SmartPolygon selectionArea);
+    boolean inSelection(double[] selectionArea);
 
     void drawHover(GraphicsContext gc, Affine transform, Affine inverse, Color color);
     void select();

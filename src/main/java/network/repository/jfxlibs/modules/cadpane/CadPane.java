@@ -28,7 +28,8 @@ public class CadPane extends StackPane {
     private ArrayList<CadFeature> selection = new ArrayList<>();
 
     private SmartPolygon lassoPolygon = new SmartPolygon();
-    private ArrayList<CadFeature> lassoSelected = new ArrayList<>();
+    private final ArrayList<CadFeature> selectionHover = new ArrayList<>();
+    private double[] rectSelect = new double[4];
 
     private Canvas cursorCanvas = new Canvas();
     private final ArrayList<CadFeature> viewElements = new ArrayList<>();
@@ -38,13 +39,13 @@ public class CadPane extends StackPane {
 
     private final ContextMenu contextMenu = new ContextMenu();
 
+
     public CadPane(Consumer<String> out, Consumer<ArrayList<CadFeature>> selectionUpdate) {
         this.out = out;
         this.selectionUpdate = selectionUpdate;
 
         getChildren().add(canvas);
         getChildren().add(cursorCanvas);
-        cursorCanvas.setCursor(Cursor.NONE);
 
         canvas.widthProperty().bind(widthProperty());
         canvas.heightProperty().bind(heightProperty());
@@ -56,6 +57,7 @@ public class CadPane extends StackPane {
         cursorCanvas.heightProperty().bind(heightProperty());
 
         setupEvents();
+
 
     }
 
@@ -97,7 +99,6 @@ public class CadPane extends StackPane {
                         feature.clearSelection();
                     }
                 }
-
                 contextMenu.getItems().clear();
                 ObservableList<MenuItem> items = contextMenu.getItems();
                 for (CadFeature feature: viewElements){
@@ -116,6 +117,8 @@ public class CadPane extends StackPane {
                     contextMenu.getItems().getFirst().fire();
                 }
 
+                rectSelect[0] = cursor.getX();
+                rectSelect[1] = cursor.getY();
             }
             redrawCursor(e.getX(), e.getY());
 
@@ -137,6 +140,11 @@ public class CadPane extends StackPane {
                 Point2D point = inverse.transform(e.getX(), e.getY());
                 lassoPolygon.getPoints().addAll(point.getX(), point.getY());
             }
+            if (e.getButton().equals(MouseButton.PRIMARY)){
+                Point2D cursor = inverse.transform(e.getX(), e.getY());
+                rectSelect[2] = cursor.getX();
+                rectSelect[3] = cursor.getY();
+            }
 
             lastMouseX = e.getX();
             lastMouseY = e.getY();
@@ -147,7 +155,7 @@ public class CadPane extends StackPane {
 
         this.setOnScroll(e -> {
             lassoPolygon.getPoints().clear();
-            lassoSelected.clear();
+            selectionHover.clear();
             double delta = e.getDeltaY();
             double zoomFactor = (delta > 0) ? 1.1 : 1 / 1.1;
 
@@ -166,15 +174,18 @@ public class CadPane extends StackPane {
         });
 
         this.setOnMouseMoved(e->{
+            this.setCursor(Cursor.NONE);
             this.lastMouseX = e.getX();
             this.lastMouseY = e.getY();
             redrawCursor(e.getX(), e.getY());
         });
 
         this.setOnMouseExited(e ->{
+            this.setCursor(Cursor.DEFAULT);
             GraphicsContext gc = cursorCanvas.getGraphicsContext2D();
             gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
             redrawCursor(e.getX(), e.getY(), false);
+
         });
 
         this.setOnMouseReleased(e->{
@@ -183,11 +194,12 @@ public class CadPane extends StackPane {
                     feature.clearSelection();
                 }
             }
-            for (CadFeature feature: lassoSelected) {
+            for (CadFeature feature: selectionHover) {
                 feature.select();
             }
+            rectSelect = new double[4];
             lassoPolygon.getPoints().clear();
-            lassoSelected.clear();
+            selectionHover.clear();
             redrawCursor(e.getX(), e.getY());
 
             selectionUpdate.accept(getSelection());
@@ -255,11 +267,11 @@ public class CadPane extends StackPane {
 
     private void redrawCursor(double x, double y, boolean drawCursor){
         StringBuilder s = new StringBuilder();
-        for (CadFeature feat: lassoSelected){
+        for (CadFeature feat: selectionHover){
             s.append("\nLasso Feature: ").append(feat.toString());
         }
 
-        lassoSelected.clear();
+        selectionHover.clear();
         GraphicsContext gc = cursorCanvas.getGraphicsContext2D();
         gc.setTransform(new Affine());
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -284,15 +296,21 @@ public class CadPane extends StackPane {
         double scale = transformation.getMxx();
         double mouseSize = 10 / scale;
         for (CadFeature feature: viewElements){
-
-            if (lassoPolygon.getPoints().isEmpty()){
+            if (!lassoPolygon.getPoints().isEmpty()){
+                if (feature.inSelection(lassoPolygon)){
+                    feature.drawHover(gc, transformation, inverse, Color.WHITE);
+                    selectionHover.add(feature);
+                }
+            }
+            else if (rectSelect[0] != 0 && rectSelect[2] != 0){
+                if (feature.inSelection(rectSelect)){
+                    feature.drawHover(gc, transformation, inverse, Color.WHITE);
+                    selectionHover.add(feature);
+                }
+            }else{
                 if (feature.mouseOver(cursor, mouseSize)){
                     feature.drawHover(gc, transformation, inverse, Color.WHITE);
                 }
-            }else
-            if (feature.inSelection(lassoPolygon)){
-                feature.drawHover(gc, transformation, inverse, Color.WHITE);
-                lassoSelected.add(feature);
             }
        }
 
@@ -300,6 +318,25 @@ public class CadPane extends StackPane {
             if(feature.selected()){
                 feature.drawHover(gc, transformation, inverse, Color.YELLOW);
             }
+        }
+
+        if (rectSelect[0] != 0 && rectSelect[2] != 0){
+            if (rectSelect[0] < rectSelect[2]){
+                gc.setLineDashes(0);
+                gc.setFill(Color.rgb(0, 120, 215, 0.3));
+                gc.setLineWidth(1);
+            }else{
+                gc.setFill(Color.rgb(40, 200, 0, 0.3));
+                gc.setLineWidth(1);
+                gc.setLineDashes(5.0);
+            }
+
+            Point2D rectStart = transformation.transform(rectSelect[0], rectSelect[1]);
+            Point2D rectEnd = transformation.transform(rectSelect[2], rectSelect[3]);
+            double[] xvalsrect = new double[] {rectStart.getX(), rectEnd.getX(), rectEnd.getX(), rectStart.getX()};
+            double[] yvalsrect = new double[] {rectStart.getY(), rectStart.getY(), rectEnd.getY(), rectEnd.getY()};
+            gc.strokePolygon(xvalsrect, yvalsrect, 4);
+            gc.fillPolygon(xvalsrect, yvalsrect, 4);
         }
 
 
@@ -311,6 +348,7 @@ public class CadPane extends StackPane {
         if (lassoPolygon.getPoints().size() > 2){
             if (lassoPolygon.getPoints().get(2) > lassoPolygon.getPoints().get(0)){
                 gc.setFill(Color.rgb(0, 120, 215, 0.3));
+                gc.setLineDashes(0);
                 gc.setLineWidth(1);
             }else{
                 gc.setFill(Color.rgb(40, 200, 0, 0.3));
@@ -334,6 +372,9 @@ public class CadPane extends StackPane {
         gc.setFillRule(FillRule.EVEN_ODD);
         gc.strokePolygon(xvals, yvals, n);
         gc.fillPolygon(xvals, yvals, n);
+
+
+
 
     }
 

@@ -84,6 +84,11 @@ public class CadPolygon implements CadFeature{
     }
 
     @Override
+    public boolean inSelection(double[] selectionArea) {
+        return false;
+    }
+
+    @Override
     public void drawHover(GraphicsContext gc,Affine transformation, Affine inverse, Color color) {
 
     }
