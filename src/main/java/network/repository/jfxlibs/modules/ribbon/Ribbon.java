@@ -8,20 +8,22 @@ import network.repository.jfxlibs.Configuration;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Consumer;
 
 public class Ribbon extends TabPane {
-    public final String profileDirectory;
-    public final String imageDirectory;
+    protected final String profileDirectory;
+    protected final String imageDirectory;
 
     private ArrayList<String> tabOrder = new ArrayList<>();
     private HashMap<String, ArrayList<Item>> tabs = new HashMap<>();
-    public final Consumer<Integer> consumer;
-    public final HashMap<Integer, Command> commands = new HashMap<>();
+    protected final Consumer<Integer> consumer;
+    protected final HashMap<Integer, Command> commands = new HashMap<>();
 
     public Ribbon(String profileDirectory, String imageDirectory, Consumer<Integer> consumer){
         super();
@@ -40,13 +42,13 @@ public class Ribbon extends TabPane {
         JSONObject profile = null;
 
         try {
-            profile = Configuration.convertXMLtoJSONObject(Paths
-                    .get(Thread
-                    .currentThread()
-                    .getContextClassLoader()
-                    .getResource(profileDirectory + "/" + name + ".xml").toURI()).toString());
+            String resourcePath = profileDirectory + "/" + name + ".xml";
+            InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourcePath);
 
-        } catch (NullPointerException | URISyntaxException i) {
+            profile = Configuration.convertXMLtoJSONObject(is);
+
+
+        } catch (NullPointerException i) {
             throw new RuntimeException(i);
         }
 
@@ -102,6 +104,10 @@ public class Ribbon extends TabPane {
             super.getTabs().add(tab);
         }
 
+    }
+
+    public Command getCommand(int id){
+        return commands.get(id);
     }
 
 }

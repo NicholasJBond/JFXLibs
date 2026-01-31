@@ -4,22 +4,21 @@ import javafx.scene.image.Image;
 import org.json.JSONObject;
 import org.json.XML;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
 public class Configuration {
-    public static JSONObject convertXMLtoJSONObject(String path){
+    public static JSONObject convertXMLtoJSONObject(InputStream is) {
+        if (is == null) {
+            throw new RuntimeException("Input stream is null. Check if the resource path is correct.");
+        }
 
-        File file = new File(path);
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
             String line;
             StringBuilder content = new StringBuilder();
             while ((line = br.readLine()) != null) {
@@ -28,20 +27,21 @@ public class Configuration {
 
             return XML.toJSONObject(content.toString());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to read XML content", e);
         }
     }
 
     public static Image toImage(String path){
-        try {
-            File file = new File(Paths
-                    .get(Thread
-                            .currentThread()
-                            .getContextClassLoader()
-                            .getResource(path).toURI()).toString());
-            return new Image(file.toURI().toString());
 
-        } catch (NullPointerException | URISyntaxException i) {
+
+        try {
+            URL resourceUrl = Thread.currentThread().getContextClassLoader().getResource(path);
+            if (resourceUrl == null) {
+                throw new IllegalArgumentException("File not found: " + path);
+            }
+            return new Image(resourceUrl.toExternalForm());
+
+        } catch (NullPointerException i) {
             throw new RuntimeException(i);
         }
 

@@ -4,6 +4,7 @@ module network.repository.jfxlibs {
     requires java.desktop;
     requires ejml.core;
     requires ejml.simple;
+    requires com.techsenger.tabpanepro.core;
 
 
     opens network.repository.jfxlibs to javafx.fxml;
