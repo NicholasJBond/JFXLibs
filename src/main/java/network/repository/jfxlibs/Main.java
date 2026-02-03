@@ -1,14 +1,8 @@
 package network.repository.jfxlibs;
 
-import com.techsenger.tabpanepro.core.TabPanePro;
-import com.techsenger.tabpanepro.core.skin.TabHeaderAreaPolicy;
-import com.techsenger.tabpanepro.core.skin.TabPaneProSkin;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -16,10 +10,7 @@ import network.repository.jfxlibs.modules.cadpane.CadFeature;
 import network.repository.jfxlibs.modules.cadpane.CadLine;
 import network.repository.jfxlibs.modules.cadpane.CadPane;
 import network.repository.jfxlibs.modules.cadpane.CadPoint;
-import network.repository.jfxlibs.modules.layoutpane.HorizontalGroup;
-import network.repository.jfxlibs.modules.layoutpane.LayoutPane;
-import network.repository.jfxlibs.modules.layoutpane.LayoutSlot;
-import network.repository.jfxlibs.modules.layoutpane.Panel;
+import network.repository.jfxlibs.modules.layoutpane.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,30 +42,32 @@ public class Main extends Application {
 
         cad2.setFeatures(data);
 
-        Panel panel = new Panel("CAD");
+        LayoutPanel panel = new LayoutPanel("CAD");
         panel.setContent(cad);
         cad.setPrefSize(500, 500);
 
 
-        Panel panel2 = new Panel("Something else");
+        LayoutPanel panel2 = new LayoutPanel("Something else");
         panel2.setContent(cad2);
         cad2.setPrefSize(500, 500);
 
-        Panel panel3 = new Panel("Nahahahahha");
+        LayoutPanel panel3 = new LayoutPanel("Nahahahahha");
         panel3.setContent(cad3);
         cad3.setPrefSize(500, 500);
 
         cad3.setFeatures(data);
 
-        HorizontalGroup group = new HorizontalGroup();
-        group.addSlot(0, new LayoutSlot(panel));
-        group.addSlot(1, new LayoutSlot(panel2));
-        group.addSlot(2, new LayoutSlot(panel3));
+        LayoutGroup group = new LayoutGroup();
+        group.add(panel);
+        group.add(panel2);
+        group.add(panel3);
 
         LayoutPane layoutPane = new LayoutPane(group);
         vBox.getChildren().add(layoutPane);
         VBox.setVgrow(layoutPane, Priority.ALWAYS);
 
+        stage.setWidth(1000);
+        stage.setHeight(1000);
         Scene scene = new Scene(vBox);
         stage.setScene(scene);
         stage.show();

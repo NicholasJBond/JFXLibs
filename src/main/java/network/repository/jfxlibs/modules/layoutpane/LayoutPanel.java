@@ -1,20 +1,16 @@
 package network.repository.jfxlibs.modules.layoutpane;
 
-import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.TitledPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-import java.awt.*;
-
-public class Panel extends VBox implements Slottable{
+public class LayoutPanel extends VBox implements Slottable{
     VBox content = new VBox();
 
-    public Panel(String title){
+    public LayoutPanel(String title){
         HBox top = new HBox();
         top.getChildren().add(new Label(title));
         top.setBackground(Background.fill(Color.LIGHTSTEELBLUE));
