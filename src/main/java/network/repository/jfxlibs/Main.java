@@ -1,6 +1,8 @@
 package network.repository.jfxlibs;
 
 import javafx.application.Application;
+import javafx.geometry.Orientation;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -42,27 +44,11 @@ public class Main extends Application {
 
         cad2.setFeatures(data);
 
-        LayoutPanel panel = new LayoutPanel("CAD");
-        panel.setContent(cad);
-        cad.setPrefSize(500, 500);
 
+        LayoutContainer container = new LayoutContainer(Orientation.VERTICAL);
+        LayoutPane layoutPane = new LayoutPane(container);
+        container.addContainer(0, () -> new Text("Hello"));
 
-        LayoutPanel panel2 = new LayoutPanel("Something else");
-        panel2.setContent(cad2);
-        cad2.setPrefSize(500, 500);
-
-        LayoutPanel panel3 = new LayoutPanel("Nahahahahha");
-        panel3.setContent(cad3);
-        cad3.setPrefSize(500, 500);
-
-        cad3.setFeatures(data);
-
-        LayoutGroup group = new LayoutGroup();
-        group.add(panel);
-        group.add(panel2);
-        group.add(panel3);
-
-        LayoutPane layoutPane = new LayoutPane(group);
         vBox.getChildren().add(layoutPane);
         VBox.setVgrow(layoutPane, Priority.ALWAYS);
 

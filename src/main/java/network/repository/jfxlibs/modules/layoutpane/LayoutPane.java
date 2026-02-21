@@ -1,20 +1,17 @@
 package network.repository.jfxlibs.modules.layoutpane;
 
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.util.Objects;
 
-public class LayoutPane extends Pane {
-    Slottable view;
-    public LayoutPane(Slottable slottable){
-        view = slottable;
-        getChildren().add(view.toNode());
+public class LayoutPane extends VBox {
+    private LayoutItem content;
+    public LayoutPane(LayoutItem content){
+        this.content = content;
         super.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/network/repository/jfxlibs/styles/layoutpane.css")).toExternalForm());
 
     }
 
-    @Override
-    public void layoutChildren(){
-        this.view.toNode().resizeRelocate(0,0, getWidth(), getHeight());
-    }
+
+
 }
