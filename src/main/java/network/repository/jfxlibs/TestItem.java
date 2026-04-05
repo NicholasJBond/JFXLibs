@@ -1,8 +1,10 @@
 package network.repository.jfxlibs;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import network.repository.jfxlibs.modules.ticklist.TickListItem;
 
-public class TestItem implements TickListItem {
+class TestItem implements TickListItem {
     boolean status;
     @Override
     public String getText() {
@@ -10,12 +12,7 @@ public class TestItem implements TickListItem {
     }
 
     @Override
-    public void update(boolean ticked) {
-        status = ticked;
-    }
-
-    @Override
-    public boolean getStatus() {
-        return status;
+    public BooleanProperty activeProperty() {
+        return new SimpleBooleanProperty();
     }
 }

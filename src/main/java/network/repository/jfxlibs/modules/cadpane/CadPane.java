@@ -1,5 +1,6 @@
 package network.repository.jfxlibs.modules.cadpane;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -8,7 +9,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Affine;
@@ -47,6 +50,17 @@ public class CadPane extends StackPane {
         getChildren().add(canvas);
         getChildren().add(cursorCanvas);
 
+        Rectangle clip = new Rectangle();
+        clip.setArcWidth(20);  // The radius
+        clip.setArcHeight(20); // The radius
+
+
+        clip.widthProperty().bind(widthProperty());
+        clip.heightProperty().bind(heightProperty());
+
+
+        setClip(clip);
+
         canvas.widthProperty().bind(widthProperty());
         canvas.heightProperty().bind(heightProperty());
 
@@ -56,7 +70,14 @@ public class CadPane extends StackPane {
         cursorCanvas.widthProperty().bind(widthProperty());
         cursorCanvas.heightProperty().bind(heightProperty());
 
+        setMinHeight(0);
+        setMinWidth(0);
+
+        VBox.setVgrow(this, Priority.ALWAYS);
+
         setupEvents();
+
+
 
 
     }
@@ -204,6 +225,24 @@ public class CadPane extends StackPane {
 
             selectionUpdate.accept(getSelection());
         });
+        Platform.runLater(()->{
+            // Inside your View or Controller initialization
+            getScene().getWindow().focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+                if (!isNowFocused) {
+                    // The user switched to Finder or another app
+                    this.setCursor(Cursor.DEFAULT);
+                } else {
+                    // The user clicked back into your assembly program
+                    this.setCursor(Cursor.NONE);
+                }
+            });
+            getScene().getWindow().focusedProperty().addListener((obs, wasFocused, isFocused) -> {
+                if (!isFocused) {
+                    getScene().setCursor(Cursor.DEFAULT);
+                }
+            });
+        });
+
     }
 
     public void setFeatures(List<CadFeature> data){
@@ -212,7 +251,6 @@ public class CadPane extends StackPane {
     }
 
     private void redraw() {
-        if(this.data.isEmpty()){return;}
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         gc.setTransform(new Affine());
@@ -220,8 +258,7 @@ public class CadPane extends StackPane {
 
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        gc.setFill(Color.RED);
-        gc.setStroke(Color.GREEN);
+        if(this.data.isEmpty()){return;}
 
         gc.save();
         gc.setTransform(transformation);

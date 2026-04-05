@@ -25,7 +25,8 @@ public class TickListCell extends ListCell<TickListItem> {
                 case MIDDLE -> {}
                 case PRIMARY -> {
                     if (isEmpty()){return;}
-                    getItem().update(!getItem().getStatus());
+                    getItem().activeProperty().setValue(!getItem().activeProperty().get());
+
                     updateItem(getItem(), false);
                 }
                 case SECONDARY -> {}
@@ -42,7 +43,7 @@ public class TickListCell extends ListCell<TickListItem> {
             setGraphic(null);
         } else {
             nameLabel.setText(item.getText());
-            checkBox.setSelected(item.getStatus());
+            checkBox.selectedProperty().bind(item.activeProperty());
             checkBox.setOnAction(Event::consume);
             setGraphic(hbox);
         }

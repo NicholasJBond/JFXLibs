@@ -5,6 +5,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class TickList extends VBox {
@@ -34,5 +35,11 @@ public class TickList extends VBox {
     }
     public void add(TickListItem... item){
         list.getItems().addAll(item);
+    }
+    public void add(ArrayList<TickListItem> items){
+        list.getItems().addAll(items);
+    }
+    public void clear(){
+        this.list.getItems().clear();
     }
 }
