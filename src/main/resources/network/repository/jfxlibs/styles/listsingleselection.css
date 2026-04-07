@@ -1,0 +1,32 @@
+.scroll-pane{
+    -fx-focus-color:transparent;
+    -fx-faint-focus-color:transparent;
+}
+
+.content{
+    -fx-alignment: center;
+    -fx-padding: 5px;
+    -fx-spacing: 5px;
+
+}
+
+.option{
+    -fx-alignment: center;
+    -fx-padding: 5 30 5 30;
+    -fx-border-color: black;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+}
+
+.option:hover{
+    -fx-background-color: derive(-fx-accent, 110%);
+}
+
+.option:pressed{
+    -fx-background-color: derive(-fx-accent, 50%);
+}
+
+.option_selected{
+    -fx-background-color: derive(-fx-accent, 50%);
+}

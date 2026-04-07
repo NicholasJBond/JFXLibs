@@ -1,40 +1,39 @@
 package network.repository.jfxlibs;
 
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.geometry.Orientation;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import network.repository.jfxlibs.modules.cadpane.CadFeature;
-import network.repository.jfxlibs.modules.cadpane.CadLine;
-import network.repository.jfxlibs.modules.cadpane.CadPane;
-import network.repository.jfxlibs.modules.cadpane.CadPoint;
-import network.repository.jfxlibs.modules.layoutpane.*;
+import network.repository.jfxlibs.modules.ticklist.ListSingleSelection;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Main extends Application {
 
 
 
-    private Text text = new Text();
     @Override
     public void start(Stage stage) throws IOException {
+        StackPane root = new StackPane();
+        Scene scene = new Scene(root, 1600, 900);
+        stage.setScene(scene);
+
+        ListSingleSelection list = new ListSingleSelection((()->{}));
+        list.options.add("Option 1");
+        list.options.add("Option 2");
+        list.options.add("Option 3");
+        list.options.add("Option 4");
+        list.update();
+
+        root.getChildren().add(list);
+        stage.show();
+        stage.centerOnScreen();
 
 
-    }
-
-    public void out(String s){
-        this.text.setText(s);
     }
 
     public static void main(String[] args) {
-        //launch(args);
+        launch(args);
     }
 
 
