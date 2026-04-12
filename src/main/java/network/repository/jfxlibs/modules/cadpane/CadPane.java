@@ -101,6 +101,9 @@ public class CadPane extends StackPane {
                 lastMouseX = e.getX();
                 lastMouseY = e.getY();
             }
+            if (e.getClickCount() == 2 && MouseButton.MIDDLE == e.getButton()){
+                zoomToExtents();
+            }
 
 
             if (e.getButton().equals(MouseButton.PRIMARY)){
@@ -199,6 +202,15 @@ public class CadPane extends StackPane {
             this.lastMouseX = e.getX();
             this.lastMouseY = e.getY();
             redrawCursor(e.getX(), e.getY());
+
+            Affine transformation = null;
+            try {
+                transformation = this.transformation.createInverse();
+            } catch (NonInvertibleTransformException ex) {
+                throw new RuntimeException(ex);
+            }
+            Point2D mouse = transformation.transform(lastMouseX, lastMouseY);
+            out.accept("X: "+ (int) mouse.getX() + "\nY: " + (int) mouse.getY());
         });
 
         this.setOnMouseExited(e ->{
@@ -242,12 +254,47 @@ public class CadPane extends StackPane {
                 }
             });
         });
-
     }
 
     public void setFeatures(List<CadFeature> data){
         this.data = data;
         redraw();
+    }
+
+    public void zoomToExtents() {
+        if (data.isEmpty()) return;
+
+        // Find the bounding box of all features
+        double minX = data.stream().mapToDouble(CadFeature::minX).min().orElse(0);
+        double minY = data.stream().mapToDouble(CadFeature::minY).min().orElse(0);
+        double maxX = data.stream().mapToDouble(CadFeature::maxX).max().orElse(0);
+        double maxY = data.stream().mapToDouble(CadFeature::maxY).max().orElse(0);
+
+        double dataWidth  = maxX - minX;
+        double dataHeight = maxY - minY;
+
+        if (dataWidth == 0 || dataHeight == 0) return;
+
+        double padding = 0.9; // use 90% of the canvas so there's a small margin
+        double scaleX = (canvas.getWidth()  * padding) / dataWidth;
+        double scaleY = (canvas.getHeight() * padding) / dataHeight;
+        double scale  = Math.min(scaleX, scaleY); // uniform scale, fit the tighter axis
+
+        // Translate so the centre of the data maps to the centre of the canvas
+        double dataCentreX   = (minX + maxX) / 2.0;
+        double dataCentreY   = (minY + maxY) / 2.0;
+        double canvasCentreX = canvas.getWidth()  / 2.0;
+        double canvasCentreY = canvas.getHeight() / 2.0;
+
+        transformation = new Affine();
+        transformation.appendScale(scale, scale);
+        transformation.appendTranslation(
+                canvasCentreX / scale - dataCentreX,
+                canvasCentreY / scale - dataCentreY
+        );
+
+        redraw();
+
     }
 
     private void redraw() {

@@ -1,12 +1,17 @@
 .scroll-pane{
     -fx-focus-color:transparent;
     -fx-faint-focus-color:transparent;
+
+}
+
+.thebox{
 }
 
 .content{
     -fx-alignment: center;
     -fx-padding: 5px;
     -fx-spacing: 5px;
+    -fx-background-color: white;
 
 }
 

@@ -2,9 +2,8 @@ package network.repository.jfxlibs.modules.ticklist;
 
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
@@ -22,9 +21,12 @@ public class ListSingleSelection extends VBox {
         scrollPane.setContent(content);
         content.getStyleClass().add("content");
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
+        VBox.setVgrow(content, Priority.ALWAYS);
         scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
         super.getChildren().add(scrollPane);
         this.onUpdate = onUpdate;
+
     }
 
     public void update(){
@@ -53,5 +55,8 @@ public class ListSingleSelection extends VBox {
 
             content.getChildren().add(hBox);
         }
+        Region region = new Region();
+        VBox.setVgrow(region, Priority.ALWAYS);
+        content.getChildren().add(region);
     }
 }
