@@ -28,14 +28,15 @@ public class CadLine implements CadFeature{
     private final double y2;
     private boolean selected = false;
     private double width = 0.5;
+    private boolean isLocked = false;
 
 
     public CadLine(int id, double x11, double y11, double x21, double y21) {
         this.id = id;
         this.x1 = x11;
-        this.y1 = y11;
+        this.y1 = -1*y11;
         this.x2 = x21;
-        this.y2 = y21;
+        this.y2 = -1*y21;
 
 
     }
@@ -137,6 +138,19 @@ public class CadLine implements CadFeature{
                     && selectionArea[3] > y1 && selectionArea[3] > y2;
         }
 
+        Line2D lineQuery = new Line2D.Double(x1, y1, x2, y2);
+
+        ArrayList<Line2D> lines = new ArrayList<>();
+        lines.add(new Line2D.Double(selectionArea[0], selectionArea[1], selectionArea[2], selectionArea[1]));
+        lines.add(new Line2D.Double(selectionArea[2], selectionArea[1], selectionArea[2], selectionArea[3]));
+        lines.add(new Line2D.Double(selectionArea[2], selectionArea[3], selectionArea[0], selectionArea[3]));
+        lines.add(new Line2D.Double(selectionArea[0], selectionArea[3], selectionArea[0], selectionArea[1]));
+
+        for (Line2D line: lines){
+            if (lineQuery.intersectsLine(line)){
+                return true;
+            }
+        }
         Point2D a = new Point2D(x1, y1);
         Point2D b = new Point2D(x2, y2);
         Polygon polygon = new Polygon();
@@ -145,6 +159,10 @@ public class CadLine implements CadFeature{
                 selectionArea[2], selectionArea[3],
                 selectionArea[0], selectionArea[3]);
         return polygon.contains(a) || polygon.contains(b);
+
+
+
+
     }
 
     @Override
@@ -190,6 +208,13 @@ public class CadLine implements CadFeature{
         V v = new V(x2-x1, y2-y1);
         DecimalFormat df = new DecimalFormat("#.###");
         return "Line: "+df.format(v.magnitude());
+    }
+
+    @Override
+    public boolean isLocked(){return isLocked;}
+
+    public void setLocked(boolean value){
+        isLocked = value;
     }
 
 

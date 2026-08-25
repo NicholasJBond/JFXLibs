@@ -19,11 +19,13 @@ public class CadPoint implements CadFeature{
     private final double y;
     private double radius = 5;
     private boolean selected = false;
+    private boolean isLocked = false;
+
     public CadPoint(int id, String name, double x, double y, double z) {
         this.id = id;
         this.name = name;
         this.x = x;
-        this.y = y;
+        this.y = -1*y;
         this.z = z;
     }
 
@@ -34,6 +36,7 @@ public class CadPoint implements CadFeature{
 
     @Override
     public void draw(GraphicsContext gc, double value) {
+        gc.setFill(Color.BLUE);
         radius = value*1.5;
         gc.fillOval(x - radius, y - radius, radius * 2, radius * 2);
     }
@@ -115,5 +118,12 @@ public class CadPoint implements CadFeature{
     public String toString(){
         DecimalFormat df = new DecimalFormat("#.###");
         return "Point: "+df.format(x)+"  "+df.format(y);
+    }
+
+    @Override
+    public boolean isLocked(){return isLocked;}
+
+    public void setLocked(boolean value){
+        isLocked = value;
     }
 }

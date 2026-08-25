@@ -26,12 +26,12 @@ public class TickListCell extends ListCell<TickListItem> {
                 case PRIMARY -> {
                     if (isEmpty()){return;}
                     getItem().activeProperty().setValue(!getItem().activeProperty().get());
-
-                    updateItem(getItem(), false);
+                    System.out.println(getItem().activeProperty());
                 }
                 case SECONDARY -> {}
             }
         });
+
     }
 
     @Override
@@ -43,7 +43,7 @@ public class TickListCell extends ListCell<TickListItem> {
             setGraphic(null);
         } else {
             nameLabel.setText(item.getText());
-            checkBox.selectedProperty().bind(item.activeProperty());
+            checkBox.selectedProperty().bindBidirectional(getItem().activeProperty());
             checkBox.setOnAction(Event::consume);
             setGraphic(hbox);
         }

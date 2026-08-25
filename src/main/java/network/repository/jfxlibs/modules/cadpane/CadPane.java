@@ -94,6 +94,15 @@ public class CadPane extends StackPane {
     }
 
     private void setupEvents() {
+        Platform.runLater(()->{
+            this.getScene().getWindow().focusedProperty().addListener((ob, o,n)->{
+                if (!n){
+                    System.out.println("No Longer focused");
+                }
+            });
+        });
+
+
         this.setOnMousePressed(e -> {
             contextMenu.hide();
 
@@ -127,11 +136,16 @@ public class CadPane extends StackPane {
                 ObservableList<MenuItem> items = contextMenu.getItems();
                 for (CadFeature feature: viewElements){
                     if (feature.mouseOver(cursor, mouseSize)){
+                        if (feature.isLocked()) {
+                            continue;
+                        }
                         MenuItem item = new MenuItem(feature.toString());
                         item.setOnAction((d)->{
                             feature.select();
                             selectionUpdate.accept(getSelection());
                         });
+
+
                         items.add(item);
                     }
                 }
@@ -203,14 +217,14 @@ public class CadPane extends StackPane {
             this.lastMouseY = e.getY();
             redrawCursor(e.getX(), e.getY());
 
-            Affine transformation = null;
+            Affine transformation;
             try {
                 transformation = this.transformation.createInverse();
             } catch (NonInvertibleTransformException ex) {
                 throw new RuntimeException(ex);
             }
             Point2D mouse = transformation.transform(lastMouseX, lastMouseY);
-            out.accept("X: "+ (int) mouse.getX() + "\nY: " + (int) mouse.getY());
+            out.accept("X: "+ (int) mouse.getX() + "\nY: " + -1*(int) mouse.getY());
         });
 
         this.setOnMouseExited(e ->{
@@ -331,7 +345,19 @@ public class CadPane extends StackPane {
             double maxY = bottomRight.getY();
 
             viewElements.clear();
+            ArrayList<CadPoint> points = new ArrayList<>(); //Top layer render
             for (CadFeature feature : data) {
+                if (feature instanceof CadPoint point){
+                    points.add(point);
+                    continue;
+                }
+                if (feature.maxX() >= minX && feature.minX() <= maxX && feature.maxY() >= minY && feature.minY() <= maxY) {
+                    viewElements.add(feature);
+                    feature.draw(gc, adjustedSize);
+                }
+            }
+
+            for (CadPoint feature: points){
                 if (feature.maxX() >= minX && feature.minX() <= maxX && feature.maxY() >= minY && feature.minY() <= maxY) {
                     viewElements.add(feature);
                     feature.draw(gc, adjustedSize);
@@ -381,18 +407,18 @@ public class CadPane extends StackPane {
         double mouseSize = 10 / scale;
         for (CadFeature feature: viewElements){
             if (!lassoPolygon.getPoints().isEmpty()){
-                if (feature.inSelection(lassoPolygon)){
+                if (feature.inSelection(lassoPolygon) && !feature.isLocked()){
                     feature.drawHover(gc, transformation, inverse, Color.WHITE);
                     selectionHover.add(feature);
                 }
             }
             else if (rectSelect[0] != 0 && rectSelect[2] != 0){
-                if (feature.inSelection(rectSelect)){
+                if (feature.inSelection(rectSelect) && !feature.isLocked()){
                     feature.drawHover(gc, transformation, inverse, Color.WHITE);
                     selectionHover.add(feature);
                 }
             }else{
-                if (feature.mouseOver(cursor, mouseSize)){
+                if (feature.mouseOver(cursor, mouseSize) && !feature.isLocked()){
                     feature.drawHover(gc, transformation, inverse, Color.WHITE);
                 }
             }

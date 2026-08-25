@@ -28,4 +28,5 @@ public interface CadFeature {
     boolean isClicked(double x, double y);
 
     void clearSelection();
+    boolean isLocked();
 }

@@ -15,4 +15,5 @@ class TestItem implements TickListItem {
     public BooleanProperty activeProperty() {
         return new SimpleBooleanProperty();
     }
+
 }

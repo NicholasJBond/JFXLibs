@@ -19,11 +19,17 @@ public class CadPolygon implements CadFeature{
     double minx;
     private boolean selected = false;
     private double width = 2;
+    private boolean isLocked = false;
+
 
 
     public CadPolygon(double[] x, double[] y) {
         xCoords = x;
-        yCoords = y;
+        yCoords = new double[y.length];
+
+        for (int i=0; i<y.length; i++){
+            yCoords[i] = -1*y[i];
+        }
 
         maxx = Arrays.stream(xCoords)
                 .max()
@@ -112,5 +118,12 @@ public class CadPolygon implements CadFeature{
     @Override
     public void clearSelection() {
         selected = false;
+    }
+
+    @Override
+    public boolean isLocked(){return isLocked;}
+
+    public void setLocked(boolean value){
+        isLocked = value;
     }
 }
